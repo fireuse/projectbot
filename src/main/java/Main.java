@@ -1,6 +1,9 @@
+import commands.CommandHandler;
+import commands.CommandRegistry;
 import data.SQLConnector;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 
@@ -17,6 +20,8 @@ public class Main {
     public static void main(String[] args) throws SQLException, IOException {
         initDb();
         GatewayDiscordClient client = DiscordClientBuilder.create("MTI5MDYyMDgzOTU5ODg4Mjg1OQ.GJtvjB.owudl-zMUGsIeFN4injtY4FMsZz83W0uGloTEM").build().login().block(); //TODO change in future
+        new CommandRegistry(client.getRestClient()).createGuildCommands(1290623087011823681L);
+        client.getEventDispatcher().on(ChatInputInteractionEvent.class).subscribe(new CommandHandler(), Throwable::printStackTrace);
         client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(messageCreateEvent -> {
             Message message = messageCreateEvent.getMessage();
 
