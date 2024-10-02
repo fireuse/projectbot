@@ -1,10 +1,13 @@
 import commands.CommandHandler;
 import commands.CommandRegistry;
+import data.RoleManager;
 import data.SQLConnector;
+import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.event.domain.role.RoleDeleteEvent;
 import discord4j.core.object.entity.Message;
 
 import java.io.BufferedReader;
@@ -29,6 +32,7 @@ public class Main {
                 message.getChannel().flatMap(channel -> channel.createMessage("pong!")).block();
             }
         });
+        client.getEventDispatcher().on(RoleDeleteEvent.class).map(RoleDeleteEvent::getRoleId).map(Snowflake::asLong).subscribe(RoleManager::deleteLeader);
         client.onDisconnect().block();
     }
 

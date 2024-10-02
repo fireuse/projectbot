@@ -2,9 +2,12 @@ package commands;
 
 import data.Project;
 import data.ProjectManager;
+import data.RoleManager;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.Role;
+import discord4j.core.spec.RoleEditSpec;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,9 +19,15 @@ public class CommandHandler implements Consumer<ChatInputInteractionEvent> {
         switch (event.getCommandName()){
             case "create-project": //TODO refactor it
                 try {
-                    ProjectManager.addProject(new Project(event.getOption("name").get().getName(),
+                    List<Long> roles = RoleManager.getLeader();
+                    boolean allowed = event.getInteraction().getMember().get().getRoleIds().stream().map(Snowflake::asLong).anyMatch(roles::contains);
+                    if (!allowed){
+                        event.reply("Only leader roles can use this command").withEphemeral(true).subscribe();
+                        break;
+                    }
+                    ProjectManager.addProject(new Project(event.getOption("name").get().getValue().get().asString(),
                             event.getInteraction().getMember().get().getId().asLong()));
-                    event.reply("Successful").subscribe();
+                    event.reply("Successful").withEphemeral(true).subscribe();
                 } catch (SQLException e) {
                     event.reply("Error").subscribe();
                     throw new RuntimeException(e);
@@ -34,6 +43,15 @@ public class CommandHandler implements Consumer<ChatInputInteractionEvent> {
                         sb.append("%d. %s - %s\n".formatted(counter, project.getName(), m.getMention()));
                     }
                     event.reply(sb.toString()).withEphemeral(true).subscribe();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "leader":
+                try {
+                    Role r = event.getInteraction().getGuild().block().createRole().flatMap(x -> x.edit(RoleEditSpec.create().withName("Leader"))).block();
+                    RoleManager.createLeader(r.getId().asLong());
+                    event.reply("Success, role %s created".formatted(r.getMention())).withEphemeral(true).subscribe();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

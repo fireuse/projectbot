@@ -16,6 +16,7 @@ public class CommandRegistry {
     }
 
     public void createGuildCommands(long guildId) {
+        ApplicationCommandRequest addEditorRole = ApplicationCommandRequest.builder().defaultMemberPermissions("0").description("Create leader role").name("leader").build();
         ApplicationCommandRequest setup = ApplicationCommandRequest.builder().description("Create announcement").name("setup").build();
         ApplicationCommandRequest createProject = ApplicationCommandRequest.builder().description("Creates a project").name("create-project").addOption(
                 ApplicationCommandOptionData.builder().name("name").description("name of project").required(true).type(ApplicationCommandOption.Type.STRING.getValue()).build()).build();
@@ -23,5 +24,6 @@ public class CommandRegistry {
         applicationService.createGuildApplicationCommand(appId, guildId, setup).subscribe();
         applicationService.createGuildApplicationCommand(appId, guildId, createProject).subscribe();
         applicationService.createGuildApplicationCommand(appId, guildId, listProject).subscribe();
+        applicationService.createGuildApplicationCommand(appId, guildId, addEditorRole).subscribe();
     }
 }

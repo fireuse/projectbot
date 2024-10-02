@@ -9,3 +9,7 @@ CREATE TABLE IF NOT EXISTS projects(
     PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS allowed_roles(
+  role BIGINT
+);
+
