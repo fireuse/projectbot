@@ -1,4 +1,4 @@
-package commands;
+package commands.handlers;
 
 import data.Project;
 import discord4j.common.util.Snowflake;

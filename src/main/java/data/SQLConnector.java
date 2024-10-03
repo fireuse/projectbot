@@ -11,9 +11,10 @@ public class SQLConnector {
     private final HikariDataSource dataSource;
     private SQLConnector(){
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://172.17.0.2"); //TODO: also change in future
+        config.setJdbcUrl("jdbc:mysql://172.17.0.2/bot"); //TODO: also change in future
         config.setUsername("root");
         config.setPassword("toor");
+        config.addDataSourceProperty("databaseName", "bot");
         config.setLeakDetectionThreshold(1000);
         config.setMaximumPoolSize(20);
         dataSource = new HikariDataSource(config);
