@@ -4,6 +4,7 @@ import data.Project;
 import data.ProjectManager;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
+import discord4j.core.event.domain.interaction.DeferrableInteractionEvent;
 import discord4j.core.event.domain.interaction.SelectMenuInteractionEvent;
 import discord4j.core.object.component.ActionRow;
 import discord4j.core.object.component.SelectMenu;
@@ -20,6 +21,10 @@ import java.util.function.Consumer;
 public class ListCommandHandler implements Consumer<ChatInputInteractionEvent> {
     @Override
     public void accept(ChatInputInteractionEvent event) {
+        processEvent(event);
+    }
+
+    public static void processEvent(DeferrableInteractionEvent event) {
         try {
             List<Project> projects = ProjectManager.getProjects();
             List<SelectMenu.Option> options = new LinkedList<>();
