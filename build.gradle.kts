@@ -16,6 +16,15 @@ dependencies {
     implementation("com.zaxxer:HikariCP:6.0.0")
 
 }
+tasks.jar {
+    manifest.attributes["Main-Class"] = "Main"
+    val dependencies = configurations
+        .runtimeClasspath
+        .get()
+        .map(::zipTree) // OR .map { zipTree(it) }
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 tasks.test {
     useJUnitPlatform()

@@ -1,11 +1,13 @@
 import commands.CommandMapper;
 import commands.CommandRegistry;
+import commands.NewMemberGreet;
 import commands.handlers.ButtonHandler;
 import data.RoleManager;
 import data.SQLConnector;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
@@ -22,11 +24,12 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) throws SQLException {
         initDb();
-        GatewayDiscordClient client = DiscordClientBuilder.create(System.getenv("TOKEN")).build().login().block(); //TODO change in future
-        new CommandRegistry(client.getRestClient()).createGuildCommands(1290623087011823681L);
+        GatewayDiscordClient client = DiscordClientBuilder.create(System.getenv("TOKEN")).build().login().block();
+        new CommandRegistry(client.getRestClient()).createGuildCommands(Long.parseLong(System.getenv("GUILD")));
         client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(new ButtonHandler());
         client.getEventDispatcher().on(ChatInputInteractionEvent.class).groupBy(ApplicationCommandInteractionEvent::getCommandName).subscribe(new CommandMapper(), Throwable::printStackTrace);
         client.getEventDispatcher().on(RoleDeleteEvent.class).map(RoleDeleteEvent::getRoleId).map(Snowflake::asLong).subscribe(RoleManager::deleteLeader);
+        client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(new NewMemberGreet());
         client.onDisconnect().block();
     }
 
