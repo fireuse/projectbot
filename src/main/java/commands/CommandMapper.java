@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class CommandMapper implements Consumer<GroupedFlux<String, ChatInputInteractionEvent>> {
-    private final Map<String, Consumer<ChatInputInteractionEvent>> maps = Map.of("list-project", new ListCommandHandler(), "leader", new LeaderCommandHandler(), "create-project", new CreateHandler(),
-            "setup", new SetupHandler(), "help", new HelpHandler(), "role", new RoleHandler());
+    private final Map<String, Consumer<ChatInputInteractionEvent>> maps = Map.of("list-project", new ListCommandHandler(), "create-project", new CreateHandler(),
+            "help", new HelpHandler(), "role", new RoleHandler());
 
     @Override
     public void accept(GroupedFlux<String, ChatInputInteractionEvent> event) {

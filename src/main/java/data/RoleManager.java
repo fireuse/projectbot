@@ -1,21 +1,10 @@
 package data;
 
-import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class RoleManager {
-    public static List<Long> getLeader() throws SQLException {
-        List<Long> out = new LinkedList<>();
-        Connection conn = SQLConnector.getConnection();
-        Statement ps = conn.createStatement();
-        ResultSet rs = ps.executeQuery("select * from allowed_roles");
-        while (rs.next()) {
-            out.add(rs.getLong(1));
-        }
-        conn.close();
-        return out;
-    }
 
     public static void createLeader(long id) throws SQLException {
         Connection conn = SQLConnector.getConnection();
@@ -25,7 +14,7 @@ public class RoleManager {
         conn.close();
     }
 
-    public static void deleteLeader(long id) {
+    public static void deleteRole(long id) {
         try {
             Connection conn = SQLConnector.getConnection();
             PreparedStatement ps = conn.prepareStatement("delete from allowed_roles where role = ?");

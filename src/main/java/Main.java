@@ -29,7 +29,7 @@ public class Main {
         new CommandRegistry(client.getRestClient()).createGuildCommands(Long.parseLong(System.getenv("GUILD")));
         client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(new ButtonHandler());
         client.getEventDispatcher().on(ChatInputInteractionEvent.class).groupBy(ApplicationCommandInteractionEvent::getCommandName).subscribe(new CommandMapper(), Throwable::printStackTrace);
-        client.getEventDispatcher().on(RoleDeleteEvent.class).map(RoleDeleteEvent::getRoleId).map(Snowflake::asLong).subscribe(RoleManager::deleteLeader);
+        client.getEventDispatcher().on(RoleDeleteEvent.class).map(RoleDeleteEvent::getRoleId).map(Snowflake::asLong).subscribe(RoleManager::deleteRole);
         client.getEventDispatcher().on(MemberJoinEvent.class).subscribe(new NewMemberGreet(), Throwable::printStackTrace);
         client.onDisconnect().block();
     }
