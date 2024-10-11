@@ -3,23 +3,25 @@ package data;
 import discord4j.common.util.Snowflake;
 
 public class Project {
-    private String name;
-    private long author;
-    private String description;
-    private Snowflake roleId;
+    private final String name;
+    private final Snowflake author;
+    private final String description;
+    private final Snowflake roleId;
+    private final Snowflake categoryId;
 
-    public Project(String name, long author, String description, Snowflake roleId) {
+    public Project(String name, Snowflake author, String description, Snowflake roleId, Snowflake categoryId) {
         this.name = name;
         this.author = author;
         this.description = description;
         this.roleId = roleId;
+        this.categoryId = categoryId;
     }
 
     public String getName() {
         return name;
     }
 
-    public long getAuthor() {
+    public Snowflake getAuthor() {
         return author;
     }
 
@@ -29,5 +31,9 @@ public class Project {
 
     public Snowflake getRoleId() {
         return roleId;
+    }
+
+    public Snowflake getCategoryId() {
+        return categoryId;
     }
 }

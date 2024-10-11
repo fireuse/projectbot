@@ -1,19 +1,28 @@
 package data;
 
+import discord4j.common.util.Snowflake;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RoleManager {
 
-    public static void createLeader(long id) throws SQLException {
-        Connection conn = SQLConnector.getConnection();
-        PreparedStatement ps = conn.prepareStatement("insert into allowed_roles values(?)");
-        ps.setLong(1, id);
-        ps.execute();
-        conn.close();
+    public static Snowflake getRoleByCategory(Snowflake category) {
+        try {
+            Connection conn = SQLConnector.getConnection();
+            PreparedStatement ps = conn.prepareStatement("select allowed_roles.role from projects inner join allowed_roles ON projects.id = allowed_roles.projectId where category=?");
+            ps.setLong(1, category.asLong());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            Snowflake res = Snowflake.of(rs.getLong(1));
+            conn.close();
+            return res;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-
     public static void deleteRole(long id) {
         try {
             Connection conn = SQLConnector.getConnection();

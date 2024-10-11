@@ -21,7 +21,7 @@ public class DescriptionHandler implements Function<SelectMenuInteractionEvent, 
     @Override
     public Mono<Void> apply(SelectMenuInteractionEvent selectMenuInteractionEvent) {
         Project p = projects.get(Integer.parseInt(selectMenuInteractionEvent.getValues().get(0)) - 1);
-        Member author = selectMenuInteractionEvent.getClient().getMemberById(selectMenuInteractionEvent.getInteraction().getGuildId().get(), Snowflake.of(p.getAuthor())).block();
+        Member author = selectMenuInteractionEvent.getClient().getMemberById(selectMenuInteractionEvent.getInteraction().getGuildId().get(), p.getAuthor()).block();
         EmbedCreateSpec spec = EmbedCreateSpec.builder()
                 .title(p.getName())
                 .description(p.getDescription())

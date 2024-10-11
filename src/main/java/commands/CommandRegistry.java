@@ -21,11 +21,13 @@ public class CommandRegistry {
                 .addOption(ApplicationCommandOptionData.builder().name("name").description("name of project").required(true).type(ApplicationCommandOption.Type.STRING.getValue()).build())
                 .addOption(ApplicationCommandOptionData.builder().name("description").description("short description of project").required(true).type(ApplicationCommandOption.Type.STRING.getValue()).build()).build();
         ApplicationCommandRequest listProject = ApplicationCommandRequest.builder().description("Lists current projects").name("list-project").build();
+        ApplicationCommandRequest deleteProject = ApplicationCommandRequest.builder().defaultMemberPermissions("0").description("Delete project").name("delete-project").build();
         ApplicationCommandRequest help = ApplicationCommandRequest.builder().description("Ważne informacje o sekcji").name("help").build();
         ApplicationCommandRequest role = ApplicationCommandRequest.builder().description("Role na serwerze").name("role").build();
         applicationService.createGuildApplicationCommand(appId, guildId, createProject).subscribe();
         applicationService.createGuildApplicationCommand(appId, guildId, listProject).subscribe();
         applicationService.createGuildApplicationCommand(appId, guildId, help).subscribe();
         applicationService.createGuildApplicationCommand(appId, guildId, role).subscribe();
+        applicationService.createGuildApplicationCommand(appId, guildId, deleteProject).subscribe();
     }
 }

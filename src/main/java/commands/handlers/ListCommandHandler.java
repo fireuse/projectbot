@@ -31,7 +31,7 @@ public class ListCommandHandler implements Consumer<ChatInputInteractionEvent> {
             StringBuilder sb = new StringBuilder("Project list:\n");
             int counter = 1;
             for (Project project : projects) {
-                Member m = event.getClient().getMemberById(event.getInteraction().getGuildId().get(), Snowflake.of(project.getAuthor())).block();
+                Member m = event.getClient().getMemberById(event.getInteraction().getGuildId().get(), project.getAuthor()).block();
                 sb.append("%d. %s - %s\n".formatted(counter, project.getName(), m.getMention()));
                 options.add(SelectMenu.Option.of(project.getName(), String.valueOf(counter)));
                 counter++;
