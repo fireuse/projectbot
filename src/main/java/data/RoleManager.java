@@ -15,7 +15,9 @@ public class RoleManager {
             PreparedStatement ps = conn.prepareStatement("select allowed_roles.role from projects inner join allowed_roles ON projects.id = allowed_roles.projectId where category=?");
             ps.setLong(1, category.asLong());
             ResultSet rs = ps.executeQuery();
-            rs.next();
+            if (!rs.next()){
+                return null;
+            }
             Snowflake res = Snowflake.of(rs.getLong(1));
             conn.close();
             return res;
