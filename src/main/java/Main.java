@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         initDb();
         GatewayDiscordClient client = DiscordClientBuilder.create(System.getenv("TOKEN")).build().gateway().setEnabledIntents(IntentSet.all()).login().block();
-        new CommandRegistry(client.getRestClient()).createGuildCommands(Long.parseLong(System.getenv("GUILD")));
+        CommandRegistry.init(client.getRestClient(), Long.parseLong(System.getenv("GUILD")));
         client.getEventDispatcher().on(ButtonInteractionEvent.class).subscribe(new ButtonHandler());
         client.getEventDispatcher().on(ChatInputInteractionEvent.class).groupBy(ApplicationCommandInteractionEvent::getCommandName).subscribe(new CommandMapper(), Throwable::printStackTrace);
         client.getEventDispatcher().on(RoleDeleteEvent.class).map(RoleDeleteEvent::getRoleId).map(Snowflake::asLong).subscribe(RoleManager::deleteRole);

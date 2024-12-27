@@ -47,6 +47,8 @@ public class CreateHandler implements Consumer<ChatInputInteractionEvent> {
         EmbedCreateSpec help = EmbedCreateSpec.builder()
                 .title("Wasza przestrzeń")
                 .description("To jest kanał prywatny do komunikacji między członkami projektu, poniżej znajdziecie listę komend do zarządzania kanałami waszego projektu")
+                .addField("/create-channel", "Tworzy kanał projektu", false)
+                .addField("/delete-channel", "Usuwa wybrany kanał projektu", false)
                 .build();
         g.createTextChannel(TextChannelCreateSpec.builder().permissionOverwrites(overwrites).parentId(team).name("Wewnętrzny").build())
                 .flatMap(x -> x.createMessage(help)).flatMap(Message::pin).block();
